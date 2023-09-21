@@ -1,0 +1,5 @@
+dog: https://opengameart.org/content/dog-sprites https://twitter.com/Shepardskin
+top down character: https://opengameart.org/content/top-down-chracter-with-different-clothes
+top down dogs: https://opengameart.org/content/lpc-cats-and-dogs
+grass:
+https://opengameart.org/content/blended-textures-of-dirt-and-grass Credit "LuminousDragonGames"

@@ -7,6 +7,7 @@ public class Follower : MonoBehaviour
     public Player player;
     public float targetRadius;
     public float maxSpeed;
+    public float rotationOffset;
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +51,7 @@ public class Follower : MonoBehaviour
         if (velocity.magnitude > 0)
         {
             float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+            angle += rotationOffset;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         }
     }

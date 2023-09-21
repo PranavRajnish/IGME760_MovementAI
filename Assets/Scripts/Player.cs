@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public Camera camera;
     public float maxSpeed;
     public float targetRadius;
+    public float rotationOffset;
 
     private InputAction fire;
     private Vector2 mouseScreenPosition;
@@ -84,6 +85,7 @@ public class Player : MonoBehaviour
         if (velocity.magnitude > 0)
         {
             float angle = Mathf.Atan2(velocity.y, velocity.x) * Mathf.Rad2Deg;
+            angle += rotationOffset;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle));
         }
     }
