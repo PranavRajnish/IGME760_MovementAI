@@ -7,14 +7,18 @@ public class Player : MonoBehaviour
 {
 
     public PlayerInputActions playerControls;
+    public Grid grid;
     public Camera camera;
     public float maxSpeed;
     public float targetRadius;
     public float rotationOffset;
 
     private InputAction fire;
+    private AStar astar;
     private Vector2 mouseScreenPosition;
     private Vector3 targetPosition;
+    private Queue<Node> path;
+
 
     private void Awake()
     {
@@ -36,13 +40,14 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        astar = GetComponent<AStar>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        Move();
+        //Move();
+        MoveOnPath();
     }
 
     private void Move()
@@ -70,13 +75,35 @@ public class Player : MonoBehaviour
         transform.position = new Vector2(newX, newY);
     }
 
+    private void MoveOnPath()
+    {
+        if(path != null && path.Count > 0)
+        {
+            Node currentNode = grid.NodeFromWorldPoint(transform.position);
+            if(currentNode == path.Peek())
+            {
+                path.Dequeue();
+            }
+            else
+            {
+                targetPosition = path.Peek().position;
+                //Move();
+                transform.position = Vector3.MoveTowards(transform.position, targetPosition, Time.deltaTime * maxSpeed);
+                Vector3 direction = targetPosition - transform.position;
+                FaceTarget(direction);
+            }
+        }
+    }
+
     private void Fire(InputAction.CallbackContext context)
     {
 
         mouseScreenPosition = Mouse.current.position.ReadValue();
         targetPosition = camera.ScreenToWorldPoint(mouseScreenPosition);
 
-        Debug.Log(targetPosition);
+        //Debug.Log(targetPosition);
+
+        path = astar.FindPath(transform.position, targetPosition);
 
     }
 
