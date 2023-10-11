@@ -61,6 +61,12 @@ public class Follower : MonoBehaviour
     {
         if (path != null && path.Count > 0)
         {
+            // To keep follower one node away from player
+            if(path.Count == 1)
+            {
+                path.Clear();
+                return;
+            }
             Node currentNode = grid.NodeFromWorldPoint(transform.position);
             if (currentNode == path.Peek())
             {
