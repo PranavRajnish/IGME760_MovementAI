@@ -39,7 +39,7 @@ public class AStar : MonoBehaviour
 
             foreach(Node neighbour in grid.GetNeighbours(currentNode))
             {
-                if(closedSet.Contains(neighbour))
+                if(neighbour.bIsObstacle || closedSet.Contains(neighbour))
                 { 
                     continue;
                 }

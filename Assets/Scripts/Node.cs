@@ -9,10 +9,12 @@ public class Node
     public int hCost;
     public int gridX;
     public int gridY;
+    public bool bIsObstacle;
     public Node parent;
 
-    public Node(Vector2 position , int gridX, int gridY)
+    public Node(bool bIsObstacle, Vector2 position , int gridX, int gridY)
     {
+        this.bIsObstacle = bIsObstacle;
         this.position = position;
         this.gridX = gridX;
         this.gridY = gridY;

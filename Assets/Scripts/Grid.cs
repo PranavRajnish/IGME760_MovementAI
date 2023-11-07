@@ -6,6 +6,7 @@ public class Grid : MonoBehaviour
 {
     public float nodeRadius;
     public Vector2 gridSize;
+    public LayerMask obstacleLayer;
 
     private Node[,] grid;
     private int nodeCountX, nodeCountY;
@@ -19,7 +20,6 @@ public class Grid : MonoBehaviour
         nodeDiameter = nodeRadius * 2;
         nodeCountX = Mathf.RoundToInt(gridSize.x/ nodeDiameter );
         nodeCountY = Mathf.RoundToInt(gridSize.y / nodeDiameter );
-        Debug.Log("nodes :" + nodeCountX);
         
         CreateGrid();
     }
@@ -28,13 +28,16 @@ public class Grid : MonoBehaviour
     {
         grid = new Node[nodeCountX, nodeCountY];
         Vector2 worldBottomLeft = new Vector2(transform.position.x, transform.position.y) - (Vector2.right * gridSize.x/2) - (Vector2.up * gridSize.y/2);
-        Debug.Log(worldBottomLeft);
+
         for (int i = 0; i < nodeCountX; i++) 
         {
             for(int j = 0; j < nodeCountY; j++)
             {
                 Vector2 worldPoint = worldBottomLeft + Vector2.right * (i * nodeDiameter + nodeRadius) + Vector2.up * (j * nodeDiameter + nodeRadius);
-                grid[i, j] = new Node(worldPoint, i , j);
+                Ray ray = new Ray(new Vector3(worldPoint.x, worldPoint.y, Camera.main.transform.position.z), new Vector3(0, 0, 1));
+                //bool obstacle = !(Physics.Raycast(ray, 50f, obstacleLayer.value));
+                bool obstacle = Physics2D.OverlapCircle(worldPoint, nodeRadius, obstacleLayer.value);
+                grid[i, j] = new Node(obstacle, worldPoint, i , j);
                 
             }
         }
@@ -82,7 +85,7 @@ public class Grid : MonoBehaviour
     {
         if(grid != null)
         {
-            Node targetNode = NodeFromWorldPoint(target.transform.position);
+            //Node targetNode = NodeFromWorldPoint(target.transform.position);
             foreach(Node point in  grid)
             {
                 Gizmos.color = Color.yellow;
@@ -94,9 +97,14 @@ public class Grid : MonoBehaviour
                     }
                 }
 
-                if(targetNode == point)
+               /* if(targetNode == point)
                 {
                     Gizmos.color = Color.red;
+                }*/
+
+                if(point.bIsObstacle)
+                {
+                    Gizmos.color = Color.magenta;
                 }
                 
                 Gizmos.DrawCube(new Vector3(point.position.x, point.position.y, 0), Vector3.one * (nodeDiameter - .1f));
